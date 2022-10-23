@@ -18,7 +18,7 @@ const config = {
   onBrokenMarkdownLinks: 'throw',
   favicon: 'img/favicon.ico',
 
-  organizationName: 'go-task',
+  organizationName: 'nightstory',
   projectName: 'task',
   deploymentBranch: 'gh-pages',
 
