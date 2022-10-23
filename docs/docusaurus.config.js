@@ -12,7 +12,7 @@ const DISCORD_URL = 'https://discord.gg/6TY36E39UK';
 const config = {
   title: 'Task',
   tagline: 'A task runner / simpler Make alternative written in Go ',
-  url: 'https://nightstory.github.io/task',
+  url: 'https://nightstory.github.io/task/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',

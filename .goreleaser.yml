@@ -66,14 +66,14 @@ nfpms:
         dst: /usr/local/share/zsh/site-functions/_task
 
 brews:
-  - name: go-task
+  - name: nightstory-go-task
     description: Task runner / simpler Make alternative written in Go
     license: MIT
     homepage: https://taskfile.dev
     folder: Formula
     tap:
-      owner: go-task
-      name: homebrew-tap
+      owner: nightstory
+      name: task-homebrew-tap
     test:
       system "#{bin}/task", "--help"
     install: |-
