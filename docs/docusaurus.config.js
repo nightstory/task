@@ -12,7 +12,7 @@ const DISCORD_URL = 'https://discord.gg/6TY36E39UK';
 const config = {
   title: 'Task',
   tagline: 'A task runner / simpler Make alternative written in Go ',
-  url: 'https://taskfile.dev',
+  url: 'https://nightstory.github.io/task',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
@@ -62,7 +62,7 @@ const config = {
       metadata: [
         {
           name: 'og:image',
-          content: 'https://taskfile.dev/img/og-image.png'
+          content: 'https://nightstory.github.io/task/img/og-image.png'
         }
       ],
       navbar: {
