@@ -23,9 +23,6 @@ build:
   ldflags:
     - -s -w # Don't set main.version.
 
-gomod:
-  proxy: true
-
 archives:
   - name_template: "{{.Binary}}_{{.Os}}_{{.Arch}}"
     files:
