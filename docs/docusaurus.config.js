@@ -13,7 +13,7 @@ const config = {
   title: 'Task',
   tagline: 'A task runner / simpler Make alternative written in Go ',
   url: 'https://nightstory.github.io/task/',
-  baseUrl: '/',
+  baseUrl: '/task/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
   favicon: 'img/favicon.ico',
