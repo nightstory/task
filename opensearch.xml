@@ -4,8 +4,8 @@
   <ShortName>Task</ShortName>
   <Description>Search Task</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Image width="16" height="16" type="image/x-icon">https://nightstory.github.io/task/img/favicon.ico</Image>
-  <Url type="text/html" method="get" template="https://nightstory.github.io/task/search?q={searchTerms}"/>
-  <Url type="application/opensearchdescription+xml" rel="self" template="https://nightstory.github.io/task/opensearch.xml" />
-  <moz:SearchForm>https://nightstory.github.io/task/</moz:SearchForm>
+  <Image width="16" height="16" type="image/x-icon">https://nightstory.github.io/task/task/img/favicon.ico</Image>
+  <Url type="text/html" method="get" template="https://nightstory.github.io/task/task/search?q={searchTerms}"/>
+  <Url type="application/opensearchdescription+xml" rel="self" template="https://nightstory.github.io/task/task/opensearch.xml" />
+  <moz:SearchForm>https://nightstory.github.io/task/task/</moz:SearchForm>
 </OpenSearchDescription>
