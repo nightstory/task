@@ -7,6 +7,7 @@ import (
 	"github.com/go-task/task/v3/internal/execext"
 	"github.com/google/uuid"
 	"os"
+	"regexp"
 	"runtime"
 )
 
@@ -60,6 +61,8 @@ func (e *GithubActionsExporter) Export(vars map[string]string) error {
 	return nil
 }
 
+var newLineRegex = regexp.MustCompile("\r\n|\r|\n")
+
 // prepareKeyValueMessage formats the key-value pair for the GITHUB_ENV file.
 // See also: https://github.com/actions/toolkit/blob/main/packages/core/src/file-command.ts#L27
 func (e *GithubActionsExporter) prepareKeyValueMessage(key string, value string) string {
@@ -68,8 +71,19 @@ func (e *GithubActionsExporter) prepareKeyValueMessage(key string, value string)
 }
 
 func (e *GithubActionsExporter) maskValue(value string) error {
-	opts := &execext.RunCommandOptions{
-		Command: fmt.Sprint("echo ::add-mask::", value),
+	lines := newLineRegex.Split(value, -1)
+	ctx := context.Background()
+
+	for _, line := range lines {
+		opts := &execext.RunCommandOptions{
+			Command: fmt.Sprintf(`echo ::add-mask::"%s"`, line),
+			Stdout:  os.Stdout,
+		}
+
+		if err := execext.RunCommand(ctx, opts); err != nil {
+			return err
+		}
 	}
-	return execext.RunCommand(context.Background(), opts)
+
+	return nil
 }

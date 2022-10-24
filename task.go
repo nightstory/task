@@ -194,12 +194,15 @@ func (e *Executor) handleExporters(call taskfile.Call, task *taskfile.Task, task
 				ghaExporter, err := exporter.NewGithubActionsExporter()
 				if err != nil {
 					e.Logger.Errf(logger.Red, "task: cannot initialise %s exporter: %v", exp, err)
+					os.Exit(1)
 				}
 				if err = ghaExporter.Export(*varsToExtract); err != nil {
 					e.Logger.Errf(logger.Red, "task: cannot export variables to %s: %v", exp, err)
+					os.Exit(1)
 				}
 			default:
 				e.Logger.Errf(logger.Red, "task: unknown exporter: %s", exp)
+				os.Exit(1)
 			}
 		}
 	}

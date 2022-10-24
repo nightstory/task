@@ -70,7 +70,7 @@ brews:
     folder: Formula
     tap:
       owner: nightstory
-      name: task-homebrew-tap
+      name: homebrew-tap-task
     test:
       system "#{bin}/task", "--help"
     install: |-
