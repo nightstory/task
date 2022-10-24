@@ -75,6 +75,10 @@ func (e *GithubActionsExporter) maskValue(value string) error {
 	ctx := context.Background()
 
 	for _, line := range lines {
+		if len(line) == 0 {
+			continue
+		}
+
 		opts := &execext.RunCommandOptions{
 			Command: fmt.Sprintf(`echo ::add-mask::"%s"`, line),
 			Stdout:  os.Stdout,

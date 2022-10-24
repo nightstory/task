@@ -209,7 +209,7 @@ func (c *CompilerV3) handleDynamicGcpVar(v taskfile.Var) (string, error) {
 
 	result, err := c.gcpSecretManager.GetValue(v.Gcp)
 	if err != nil {
-		return "", fmt.Errorf("accessing gcp value failed: %s", err)
+		return "", fmt.Errorf("accessing gcp value failed (%s): %s", v.Gcp, err)
 	}
 
 	c.dynamicCache[v.Gcp] = result
