@@ -1,9 +1,13 @@
 package secrets
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/go-task/task/v3/internal/execext"
+	"golang.org/x/oauth2/google"
 	"google.golang.org/api/option"
 	"hash/crc32"
 	"os"
@@ -35,8 +39,12 @@ func NewGoogleCloudSecretManager() (*GoogleCloudSecretManager, error) {
 	defaultProject := os.Getenv("TASK_GCP_DEFAULT_PROJECT")
 	defaultVersion := os.Getenv("TASK_GCP_SECRET_DEFAULT_VERSION")
 
-	if defaultVersion == "" {
+	if len(defaultVersion) == 0 {
 		defaultVersion = "latest"
+	}
+
+	if len(defaultProject) == 0 {
+		defaultProject = guessProjectId(credentials)
 	}
 
 	ctx := context.Background()
@@ -115,4 +123,43 @@ func (m *GoogleCloudSecretManager) prepareReference(id string) (string, error) {
 	default:
 		return "", errors.New("broken gcp secret format")
 	}
+}
+
+// guessProjectId tries to guess the current GCP project ID
+func guessProjectId(credentialsJSON string) string {
+	ctx := context.Background()
+	var credentials *google.Credentials
+
+	if len(credentialsJSON) > 0 {
+		credentials, _ = google.CredentialsFromJSON(ctx, []byte(credentialsJSON))
+	} else {
+		credentials, _ = google.FindDefaultCredentials(ctx)
+	}
+
+	if credentials != nil && len(credentials.ProjectID) > 0 {
+		return credentials.ProjectID
+	}
+
+	var stdout bytes.Buffer
+	opts := &execext.RunCommandOptions{
+		Command: fmt.Sprint(`gcloud -q config list core/project --format=json`),
+		Stdout:  &stdout,
+	}
+
+	if err := execext.RunCommand(ctx, opts); err != nil {
+		return ""
+	}
+
+	type gcloudConfig struct {
+		Core struct {
+			Project string `json:"project"`
+		} `json:"core"`
+	}
+	var config gcloudConfig
+	if err := json.Unmarshal(stdout.Bytes(), &config); err != nil {
+		fmt.Printf("err: %+v", err)
+		return ""
+	}
+
+	return config.Core.Project
 }
