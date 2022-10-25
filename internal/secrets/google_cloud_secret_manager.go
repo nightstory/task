@@ -103,7 +103,7 @@ func (m *GoogleCloudSecretManager) prepareReference(id string) (string, error) {
 
 	switch len(parts) {
 	case 1:
-		if m.defaultVersion == "" {
+		if m.defaultProject == "" {
 			return "", errors.New("gcp default project is not set and project is not specified in secret")
 		}
 
