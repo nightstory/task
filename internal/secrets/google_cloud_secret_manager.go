@@ -142,7 +142,7 @@ func guessProjectId(credentialsJSON string) string {
 
 	var stdout bytes.Buffer
 	opts := &execext.RunCommandOptions{
-		Command: fmt.Sprint(`gcloud -q config list core/project --format=json`),
+		Command: "gcloud -q config list core/project --format=json",
 		Stdout:  &stdout,
 	}
 
