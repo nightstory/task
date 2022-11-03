@@ -2,6 +2,7 @@ package exporter
 
 import (
 	"fmt"
+	"github.com/go-task/task/v3/internal/extractor"
 	"github.com/google/uuid"
 	"io"
 	"os"
@@ -21,7 +22,7 @@ func TestGithubActionsExporter_Export(t *testing.T) {
 		eol           string
 	}
 	type args struct {
-		vars map[string]string
+		vars map[string]extractor.ExtractedVar
 	}
 	tests := []struct {
 		name            string
@@ -33,7 +34,7 @@ func TestGithubActionsExporter_Export(t *testing.T) {
 		{
 			name:            "validSingleKeys",
 			fields:          fields{envFilePath: tmpFileName("0"), uuidGenerator: tmpUuidGenerator, eol: "\n"},
-			args:            args{vars: map[string]string{"key": "value"}},
+			args:            args{vars: map[string]extractor.ExtractedVar{"key": {Static: "value"}}},
 			wantFileContent: fmt.Sprintf("key<<ghadelimiter_%s\nvalue\nghadelimiter_%s\n", tmpUuid, tmpUuid),
 		},
 	}
