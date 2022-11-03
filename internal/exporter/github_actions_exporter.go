@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/go-task/task/v3/internal/execext"
-	"github.com/go-task/task/v3/internal/extractor"
 	"github.com/google/uuid"
 	"os"
 	"regexp"
@@ -43,7 +42,7 @@ func NewGithubActionsExporter() (*GithubActionsExporter, error) {
 }
 
 // Export sets the vars evaluated values to the GitHub Actions environment
-func (e *GithubActionsExporter) Export(vars map[string]extractor.ExtractedVar) error {
+func (e *GithubActionsExporter) Export(vars map[string]string) error {
 	f, err := os.OpenFile(e.envFilePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY|os.O_SYNC, 0600)
 	if err != nil {
 		return fmt.Errorf("cannot write to %s file", gitHubEnvName)
@@ -51,12 +50,10 @@ func (e *GithubActionsExporter) Export(vars map[string]extractor.ExtractedVar) e
 	defer f.Close()
 
 	for k, v := range vars {
-		if v.Secret {
-			if err = e.maskValue(v.Static); err != nil {
-				return err
-			}
+		if err = e.maskValue(v); err != nil {
+			return err
 		}
-		if _, err = f.WriteString(e.prepareKeyValueMessage(k, v.Static)); err != nil {
+		if _, err = f.WriteString(e.prepareKeyValueMessage(k, v)); err != nil {
 			return err
 		}
 	}

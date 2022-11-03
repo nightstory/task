@@ -1,7 +1,6 @@
 package task
 
 import (
-	"github.com/go-task/task/v3/internal/extractor"
 	"github.com/go-task/task/v3/taskfile"
 )
 
@@ -14,7 +13,7 @@ func extractAllVarsForTask(
 	task *taskfile.Task,
 	taskEvaluatedVars *taskfile.Vars,
 	additionalVars ...*taskfile.Vars,
-) *map[string]extractor.ExtractedVar {
+) *map[string]string {
 	// we want to export only the user-specified vars and envs
 	excludeVars := []string{
 		"CLI_ARGS",
@@ -70,13 +69,10 @@ func extractAllVarsForTask(
 		delete(result.Mapping, excludeVar)
 	}
 
-	resultMapping := make(map[string]extractor.ExtractedVar, 0)
+	resultMapping := make(map[string]string, 0)
 
 	for k, v := range result.Mapping {
-		resultMapping[k] = extractor.ExtractedVar{
-			Static: v.Static,
-			Secret: len(v.Gcp) > 0 || len(v.Sh) > 0,
-		}
+		resultMapping[k] = v.Static
 	}
 
 	if result.Len() > 0 {
