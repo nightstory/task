@@ -9,6 +9,7 @@ import (
 	"os"
 	"regexp"
 	"runtime"
+	"strings"
 )
 
 type uuidGenerator func() uuid.UUID
@@ -71,6 +72,10 @@ func (e *GithubActionsExporter) prepareKeyValueMessage(key string, value string)
 }
 
 func (e *GithubActionsExporter) maskValue(value string) error {
+	if len(strings.TrimSpace(value)) < 3 {
+		return nil
+	}
+
 	lines := newLineRegex.Split(value, -1)
 	ctx := context.Background()
 
