@@ -2,6 +2,7 @@ package exporter
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/go-task/task/v3/internal/execext"
@@ -83,9 +84,13 @@ func (e *GithubActionsExporter) maskValue(value string) error {
 		if len(line) == 0 {
 			continue
 		}
+		escapedLine, err := escapeJson(line)
+		if err != nil {
+			return err
+		}
 
 		opts := &execext.RunCommandOptions{
-			Command: fmt.Sprintf(`echo ::add-mask::"%s"`, line),
+			Command: fmt.Sprintf(`echo ::add-mask::"%s"`, escapedLine),
 			Stdout:  os.Stdout,
 		}
 
@@ -95,4 +100,12 @@ func (e *GithubActionsExporter) maskValue(value string) error {
 	}
 
 	return nil
+}
+
+func escapeJson(i string) (string, error) {
+	b, err := json.Marshal(i)
+	if err != nil {
+		return "", err
+	}
+	return string(b[1 : len(b)-1]), nil
 }
